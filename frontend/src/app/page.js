@@ -1,11 +1,11 @@
 export default function Home() {
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 mb-5">
       <div className="row">
         <div className="col-md-6 d-flex justify-content-center align-items-center">
           <img 
             className="img-fluid" 
-            style={{ height: "800px", objectFit: 'cover' }} 
+            style={{ height: "700px", objectFit: 'cover' }} 
             src="/scales.jpeg" 
             alt="art deco scales of justice"
           />
