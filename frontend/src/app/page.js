@@ -1,4 +1,14 @@
+'use client'
+import { useState } from 'react'
+import ForgotPasswordModal from '@/app/components/ForgotPasswordModal'
+import Button from 'react-bootstrap/Button'
+
 export default function Home() {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true)
+
   return (
     <div className="container mt-5 mb-5">
       <div className="row">
@@ -38,15 +48,22 @@ export default function Home() {
                   <input type="checkbox" value="remember-me" /> Remember me
                 </label>
               </div>
-              <button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+              <Button variant="primary" size="lg">Sign in</Button>
               <div className="mt-3">
-                <button className="btn btn-sm w-50 link-primary">Forgot password?</button>
-                <button className="btn btn-sm w-50 link-primary">Don't have an account? Sign up</button>
+                <Button 
+                  variant="link"
+                  onClick={handleShow}
+                >
+                    Forgot password?
+                </Button>
+                <Button variant="link"
+                >Don't have an account? Sign up</Button>
               </div>
             </form>
           </div>
         </div>
       </div>
+    {show && <ForgotPasswordModal handleClose={handleClose} show={show}/>}
     </div>
   );
 }
