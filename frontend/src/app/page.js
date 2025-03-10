@@ -7,7 +7,7 @@ export default function Home() {
             className="img-fluid" 
             style={{ height: "800px", objectFit: 'cover' }} 
             src="/scales.jpeg" 
-            alt="blindfolded woman holding scales of justice"
+            alt="art deco scales of justice"
           />
         </div>
 
