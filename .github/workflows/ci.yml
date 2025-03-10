@@ -60,10 +60,28 @@ jobs:
     runs-on: ubuntu-latest
     needs: [backend, frontend]
     steps:
-      - name: Deploy backend
+      - name: Deploy frontend to production (if on main branch)
+        if: github.ref == 'refs/heads/main'
         run: |
-          # Add backend deploy steps here
+          # Add frontend deploy steps for production
+          curl -X POST https://api.vercel.com/v13/deployments \
+            -H 'Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}' \
+            -H 'Content-Type: application/json' \
+            -d '{
+                  "name": "legal-easy",
+                  "target": "production",
+                  "gitSource": {"branch": "main"}
+                }'
 
-      - name: Deploy frontend
+      - name: Deploy frontend to preview (if pull request)
+        if: github.event_name == 'pull_request'
         run: |
-          # Add frontend deploy steps here
+          # Add frontend deploy steps for preview
+          curl -X POST https://api.vercel.com/v13/deployments \
+            -H 'Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}' \
+            -H 'Content-Type: application/json' \
+            -d '{
+                  "name": "legal-easy",
+                  "target": "preview",
+                  "gitSource": {"branch": "${{ github.head_ref }}"}
+                }'
