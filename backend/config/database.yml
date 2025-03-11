@@ -8,18 +8,18 @@ development:
   database: backend_development
   username: daniellecardona
   password: <%= ENV.fetch("DATABASE_PASSWORD") { "" } %>
-  host: localhost  
+  host: postgres  
 
 test:
   <<: *default
   database: backend_test
   username: <%= ENV.fetch("PGUSER") { "postgres" } %>
   password: <%= ENV.fetch("PGPASSWORD") { "" } %>
-  host: localhost  
+  host: postgres  
 
 production:
   <<: *default
   database: backend_production
   username: daniellecardona
   password: <%= ENV.fetch("PGPASSWORD") { "" } %>  
-  host: localhost  
+  host: postgres  
