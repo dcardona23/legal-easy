@@ -6,16 +6,20 @@ default: &default
 development:
   <<: *default
   database: backend_development
+  username: daniellecardona
+  password: <%= ENV.fetch("DATABASE_PASSWORD") { "" } %>
+  host: localhost  
 
 test:
   <<: *default
   database: backend_test
   username: <%= ENV.fetch("PGUSER") { "postgres" } %>
   password: <%= ENV.fetch("PGPASSWORD") { "" } %>
-  host: <%= ENV.fetch("PGHOST") { "localhost" } %>
+  host: localhost  
 
 production:
   <<: *default
   database: backend_production
   username: daniellecardona
-  password: <%= ENV.fetch("PGUSER") { "postgres" } %>
+  password: <%= ENV.fetch("PGPASSWORD") { "" } %>  
+  host: localhost  

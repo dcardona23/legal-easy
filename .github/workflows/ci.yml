@@ -17,8 +17,8 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_USER: daniellecardona
-          POSTGRES_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+          POSTGRES_USER: ${{ secrets.PGUSER }}
+          POSTGRES_PASSWORD: ${{ secrets.PGPASSWORD }}
           POSTGRES_DB: backend_test
         options: >-
           --health-cmd="pg_isready -U postgres"
