@@ -33,7 +33,7 @@ test:
   database: backend_test
   username: daniellecardona
   password: <%= ENV["DATABASE_PASSWORD"] %>
-  host: localhost
+  host: postgres
   port: 5432
 
 production:
