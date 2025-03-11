@@ -11,6 +11,20 @@ on:
 jobs:
   backend:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: daniellecardona
+          POSTGRES_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+          POSTGRES_DB: backend_test
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -24,6 +38,12 @@ jobs:
         run: |
           cd backend
           bundle install
+
+      - name: Set up database
+        run: |
+          cd backend
+          bundle exec rake db:create
+          bundle exec rake db:schema:load
 
       - name: Run backend tests
         run: |
