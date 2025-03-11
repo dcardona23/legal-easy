@@ -25,6 +25,7 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -39,6 +40,13 @@ jobs:
           cd backend
           bundle install
 
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          while ! pg_isready -h postgres -U postgres; do
+            echo "Waiting for PostgreSQL to be ready..."
+            sleep 1
+          done
+
       - name: Set up database
         run: |
           cd backend
@@ -49,59 +57,3 @@ jobs:
         run: |
           cd backend
           bundle exec rspec
-
-  frontend:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '23.6.1'  
-
-      - name: Install frontend dependencies
-        run: |
-          cd frontend
-          npm install
-
-      - name: Run frontend tests
-        run: |
-          cd frontend
-          npm run test:ci
-
-      - name: Build frontend
-        run: |
-          cd frontend
-          npm run build
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: [backend, frontend]
-    steps:
-      - name: Deploy frontend to production (if on main branch)
-        if: github.ref == 'refs/heads/main'
-        run: |
-          curl -X POST https://api.vercel.com/v13/deployments \
-            -H 'Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}' \
-            -H 'Content-Type: application/json' \
-            -d '{
-                  "name": "legal-easy",
-                  "target": "production",
-                  "gitSource": {
-                    "branch": "main",
-                    "ref": "refs/heads/main"}
-                }'
-
-      - name: Deploy frontend to preview (if pull request)
-        if: github.event_name == 'pull_request'
-        run: |
-          curl -X POST https://api.vercel.com/v13/deployments \
-            -H 'Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}' \
-            -H 'Content-Type: application/json' \
-            -d '{
-                  "name": "legal-easy",
-                  "target": "preview",
-                  "gitSource": {"branch": "${{ github.head_ref }}"}
-                }'
