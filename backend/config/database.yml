@@ -84,8 +84,8 @@ production:
   primary: &primary_production
     <<: *default
     database: backend_production
-    username: backend
-    password: <%= ENV["BACKEND_DATABASE_PASSWORD"] %>
+    username: daniellecardona
+    password: <%= ENV["DATABASE_PASSWORD"] %>
   cache:
     <<: *primary_production
     database: backend_production_cache
