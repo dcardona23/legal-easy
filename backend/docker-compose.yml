@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: daniellecardona
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: backend_production
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend_network
+
+  backend:
+    build: .
+    command: bash -c "bundle exec rake db:create db:migrate && bundle exec rails s -b '0.0.0.0'"
+    environment:
+      RAILS_ENV: production
+      DATABASE_HOST: postgres
+      DATABASE_USERNAME: daniellecardona
+      DATABASE_PASSWORD: password
+      DATABASE_NAME: backend_production
+    ports:
+      - "80:80"  
+    depends_on:
+      - postgres  
+    volumes:
+      - ".:/rails"  
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - backend_network
+
+networks:
+  backend_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
