@@ -37,14 +37,22 @@ jobs:
           cd backend
           bundle install
 
-      - name: Set up database
+           - name: Set up database
         run: |
           cd backend
-          # Wait for PostgreSQL to be ready (use the 'postgres' service name)
           echo "Waiting for PostgreSQL to be ready..."
+          # Timeout after 2 minutes (120 seconds) if PostgreSQL isn't ready
+          timeout=120
+          start_time=$(date +%s)
           until pg_isready -h postgres -p 5432 -U postgres; do
+            current_time=$(date +%s)
+            elapsed_time=$((current_time - start_time))
+            if [ $elapsed_time -ge $timeout ]; then
+              echo "PostgreSQL did not become ready within $timeout seconds, exiting..."
+              exit 1  # Force failure after timeout
+            fi
             echo "PostgreSQL not ready, waiting..."
-            sleep 5
+            sleep 10
           done
           echo "PostgreSQL is ready, proceeding with setup..."
 
@@ -55,7 +63,7 @@ jobs:
           # bundle exec rake db:seed
 
       - name: Show PostgreSQL logs
-        continue-on-error: true
+        continue-on-error: true  # This ensures the logs are shown even if the previous step fails
         run: |
           echo "Showing PostgreSQL container logs for troubleshooting"
           docker logs $(docker ps -q --filter "ancestor=postgres:13")
