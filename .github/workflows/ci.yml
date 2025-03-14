@@ -54,6 +54,11 @@ jobs:
           # Optionally, you can also seed the database if needed
           # bundle exec rake db:seed
 
+      - name: Show PostgreSQL logs
+        run: |
+          echo "Showing PostgreSQL container logs for troubleshooting"
+          docker logs $(docker ps -q --filter "ancestor=postgres:13")
+
       - name: Run backend tests
         run: |
           cd backend
