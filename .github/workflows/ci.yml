@@ -48,6 +48,13 @@ jobs:
         with:
           version: latest
 
+      - name: Install Docker Compose 
+        run: |
+          curl -L https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m) -o $HOME/docker-compose
+          chmod +x $HOME/docker-compose
+          mv $HOME/docker-compose /usr/local/bin/docker-compose
+          docker-compose --version  
+
       - name: Build and run containers
         run: |
           docker-compose -f ../docker-compose.yml up -d
