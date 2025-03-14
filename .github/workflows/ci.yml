@@ -11,6 +11,17 @@ on:
 jobs:
   backend:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: my_database
+        ports:
+          - 5432:5432
+        options: --health-cmd="pg_isready -U postgres" --health-interval=5s --health-timeout=5s --health-retries=5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -24,6 +35,20 @@ jobs:
         run: |
           cd backend
           bundle install
+
+      - name: Set up database
+        run: |
+          cd backend
+          # Wait for PostgreSQL to be ready
+          until pg_isready -h localhost -p 5432 -U postgres; do
+            echo "Waiting for database to be ready..."
+            sleep 2
+          done
+          # Run database migrations
+          bundle exec rake db:create
+          bundle exec rake db:migrate
+          # Optionally, you can also seed the database if needed
+          # bundle exec rake db:seed
 
       - name: Run backend tests
         run: |
@@ -85,3 +110,5 @@ jobs:
                   "target": "preview",
                   "gitSource": {"branch": "${{ github.head_ref }}"}
                 }'
+
+                
