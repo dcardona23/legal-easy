@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - cypress_ci
+      - user_authentication 
   pull_request:
     branches:
       - main
