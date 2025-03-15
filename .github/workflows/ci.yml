@@ -41,13 +41,6 @@ jobs:
           cd backend
           bundle install
 
-      - name: Wait for PostgreSQL to be ready
-        run: |
-          until pg_isready -h postgres -U postgres; do
-            echo "Waiting for PostgreSQL..."
-            sleep 5  # Increased sleep time
-          done
-
       - name: Run backend tests
         run: |
           cd backend
