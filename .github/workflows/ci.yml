@@ -19,11 +19,11 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_USER: postgres
+          POSTGRES_USER: daniellecardona
           POSTGRES_PASSWORD: password
-          POSTGRES_DB: backend_test
+          POSTGRES_DB: legal_easy_test  # Ensure this matches the DB name in `database.yml`
         options: >-
-          --health-cmd="pg_isready -U postgres"
+          --health-cmd="pg_isready -U daniellecardona"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
@@ -34,16 +34,23 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.2.2  
+          ruby-version: 3.2.2
 
       - name: Install backend dependencies
         run: |
           cd backend
           bundle install
 
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          until pg_isready -h postgres -U daniellecardona; do
+            echo "Waiting for PostgreSQL..."
+            sleep 5
+          done
+
       - name: Create and migrate the test database
         run: |
-          cd backend 
+          cd backend
           bundle exec rake db:create RAILS_ENV=test
           bundle exec rake db:migrate RAILS_ENV=test
 
