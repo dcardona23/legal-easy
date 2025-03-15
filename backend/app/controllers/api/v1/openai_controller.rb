@@ -5,3 +5,4 @@ class Api::V1::OpenaiController < ApplicationController
   end
 
 end
+ 
