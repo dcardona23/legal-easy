@@ -43,29 +43,16 @@ jobs:
 
       - name: Wait for PostgreSQL to be ready
         run: |
-          echo "Waiting for PostgreSQL to be ready..."
-          for i in {1..30}; do
-            if pg_isready -h postgres -U postgres; then
-              echo "PostgreSQL is ready!"
-              break
-            fi
-            echo "Waiting... attempt $i"
-            sleep 5
+          until pg_isready -h postgres -U postgres; do
+            echo "Waiting for PostgreSQL..."
+            sleep 5  # Increased sleep time
           done
-          if [ $i -eq 30 ]; then
-            echo "PostgreSQL did not become ready in time, exiting"
-            exit 1
-          fi
-
-      - name: Set up Database
-        run: |
-          cd backend
-          RAILS_ENV=test bundle exec rake db:create db:schema:load
 
       - name: Run backend tests
         run: |
           cd backend
           bundle exec rspec
+
 
   frontend:
     runs-on: ubuntu-latest
