@@ -2,24 +2,27 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: 5
-  username: postgres
-  password: password
+  username: <%= ENV['DATABASE_USERNAME'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
+  host: <%= ENV['DATABASE_HOST'] %>
 
 development:
   <<: *default
   database: legal_easy_development
+  host: backend-postgres-1  # Ensure this is correct for your development environment
+  username: postgres
+  password: postgres
 
 test:
   <<: *default
   database: legal_easy_test
-  username: <%= ENV['DATABASE_USERNAME'] %>  # Use the correct user for testing
+  host: backend-postgres-1  # Ensure this is correct for your test environment
+  username: <%= ENV['DATABASE_USERNAME'] %>
   password: <%= ENV['DATABASE_PASSWORD'] %>
-  host: postgres  # Make sure this is the same name as the service in GitHub Actions
 
 production:
   <<: *default
-  database: legal_easy_production  # Make sure this matches the DB name
-  username: <%= ENV['DATABASE_USERNAME'] %>  # Use the env var for consistency
+  database: legal_easy_production
+  username: <%= ENV['DATABASE_USERNAME'] %>
   password: <%= ENV['DATABASE_PASSWORD'] %>
-  host: <%= ENV['DATABASE_HOST'] %>
-
+  host: <%= ENV['DATABASE_HOST'] %>  # Ensure this is set properly for production

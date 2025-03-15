@@ -23,5 +23,4 @@ group :development, :test do
   gem "pry-rails"
   gem "brakeman", require: false
   gem "rubocop-rails-omakase", require: false
-  gem "database_cleaner-active_record"  # Optional but helpful for CI testing
-end
+  end

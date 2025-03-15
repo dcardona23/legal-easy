@@ -11,6 +11,12 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - backend_network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "daniellecardona"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
 
   backend:
     build: .
