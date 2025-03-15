@@ -14,7 +14,7 @@ test:
   database: legal_easy_test
   username: postgres
   password: password
-  host: <%= ENV['DB_HOST'] || 'localhost' %>
+  host: postgres
 
 production:
   <<: *default

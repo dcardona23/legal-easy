@@ -41,12 +41,15 @@ jobs:
           cd backend
           bundle install
 
+      - name: Create and migrate the test database
+        run: |
+          bundle exec rake db:create RAILS_ENV=test
+          bundle exec rake db:migrate RAILS_ENV=test
+
       - name: Run backend tests
         run: |
           cd backend
-          rails db:create
           bundle exec rspec
-
 
   frontend:
     runs-on: ubuntu-latest
