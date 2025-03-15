@@ -21,7 +21,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
-          POSTGRES_DB: test_database
+          POSTGRES_DB: backend_test
         options: >-
           --health-cmd="pg_isready -U postgres"
           --health-interval=10s
