@@ -46,10 +46,15 @@ jobs:
           cd frontend
           npm install
 
-      - name: Run frontend tests
+      - name: Install Cypress
         run: |
           cd frontend
-          npm run test:ci
+          npm install cypress --save-dev
+
+      - name: Run Cypress tests
+        run: |
+          cd frontend
+          npx cypress run --headless --browser chrome
 
       - name: Build frontend
         run: |
