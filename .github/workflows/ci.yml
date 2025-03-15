@@ -23,7 +23,7 @@ jobs:
           POSTGRES_PASSWORD: password
           POSTGRES_DB: legal_easy_test  # Ensure this matches the DB name in `database.yml`
         options: >-
-          --health-cmd="pg_isready -U daniellecardona"
+          --health-cmd="pg_isready -U daniellecardona -d legal_easy_test"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
@@ -43,7 +43,8 @@ jobs:
 
       - name: Wait for PostgreSQL to be ready
         run: |
-          until pg_isready -h postgres -U daniellecardona; do
+          echo "Waiting for PostgreSQL to be ready..."
+          until pg_isready -h postgres -U daniellecardona -d legal_easy_test; do
             echo "Waiting for PostgreSQL..."
             sleep 5
           done
@@ -68,7 +69,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '23.6.1'  
+          node-version: '23.6.1'
 
       - name: Install frontend dependencies
         run: |
