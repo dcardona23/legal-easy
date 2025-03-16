@@ -50,5 +50,5 @@ group :development, :test do
 end
 
 
-
+ruby "3.2.2"
 gem "webpacker", "~> 5.4"
